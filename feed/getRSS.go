@@ -30,7 +30,7 @@ type Channel struct {
 	Items       []Item `xml:"item"`
 }
 
-func Get(feedURL string) *Rss {
+func GetRSS(feedURL string) *Rss {
 
 	response, err := http.Get(feedURL)
 	if err != nil {

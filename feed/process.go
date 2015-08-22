@@ -78,7 +78,7 @@ func checkAndGet(i int, item Item, audioDir string, visualDir string) {
 
 func Process(url string, audioDir string, visDir string) {
 
-	rss := Get(url)
+	rss := GetRSS(url)
 	if rss == nil {
 		return
 	}
@@ -90,6 +90,8 @@ func Process(url string, audioDir string, visDir string) {
 	total := len(rss.Channel.Items)
 
 	log.Printf("Total items : %v\n", total)
+	spot := GetPrices()
+	log.Printf("Spot is %v", spot)
 
 	if total == 0 {
 		return
