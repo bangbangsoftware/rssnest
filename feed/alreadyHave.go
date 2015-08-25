@@ -10,10 +10,11 @@ import (
 
 var gotAlready map[string]Item = make(map[string]Item)
 var justGot []Item
+var prices [][]GoldMoney
 
 var perm os.FileMode = 0777
 
-func loadItems() {
+func loadItems(dir string) {
 	log.Printf("About to load alreadyHave.json\n")
 	file, e := ioutil.ReadFile("./alreadyHave.json")
 	var data []byte
@@ -30,26 +31,35 @@ func loadItems() {
 	}
 	json.Unmarshal(file, &gotAlready)
 	log.Printf("already have list is: %n \n", len(gotAlready))
-	ioutil.WriteFile("./newData.json", data, perm)
+	ioutil.WriteFile(dir+"newData.json", data, perm)
 
 }
 
-func Have(item Item, link string) {
+func Have(item Item, link string, dir string) {
 	log.Printf("saving alreadyHave file\n\n")
 	gotAlready[link] = item
 	jsave, _ := json.Marshal(gotAlready)
 	var data []byte = jsave
-	ioutil.WriteFile("./alreadyHave.json", data, perm)
+	ioutil.WriteFile(dir+"alreadyHave.json", data, perm)
+
 	justGot = append(justGot, item)
 	jsave, _ = json.Marshal(justGot)
 	var data2 []byte = jsave
-	ioutil.WriteFile("./newData.json", data2, perm)
+	ioutil.WriteFile(dir+"newData.json", data2, perm)
+
+	spot := GetPrices()
+	log.Printf("Spot is %v", spot)
+	prices = append(prices, spot)
+	jsave, _ = json.Marshal(prices)
+	var data3 []byte = jsave
+	ioutil.WriteFile(dir+"prices.json", data3, perm)
+
 }
 
-func AlreadyHave(itemLink string) bool {
+func AlreadyHave(itemLink string, dir string) bool {
 
 	if len(gotAlready) == 0 {
-		loadItems()
+		loadItems(dir)
 	}
 	if _, ok := gotAlready[itemLink]; ok {
 		return true

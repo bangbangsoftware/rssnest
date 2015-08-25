@@ -2,6 +2,8 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
+	"github.com/bangbangsoftware/config"
 	"github.com/bangbangsoftware/feed"
 	"io/ioutil"
 	"log"
@@ -32,37 +34,6 @@ type Casts struct {
 	Items []Item
 }
 
-type GeneralConf struct {
-	Sleep     int
-	Feedfile  string
-	AudioDir  string
-	VisualDir string
-}
-
-type FtpConf struct {
-	Url string
-	Usr string
-	Pw  string
-}
-
-type TweetConf struct {
-	ConsumerKey       string
-	ConsumerSecret    string
-	AccessTokenKey    string
-	AccessTokenSecret string
-}
-
-type PropergateConf struct {
-	IncludePrice bool
-	Ftp          FtpConf
-	Tweet        TweetConf
-}
-
-type Conf struct {
-	General    GeneralConf
-	Propergate PropergateConf
-}
-
 //type ItemConf struct {
 //
 //}
@@ -91,18 +62,16 @@ type Conf struct {
 
 func main() {
 	//log.Println(http.ListenAndServe(":6060", nil))
-	file, e := ioutil.ReadFile("./conf.json")
-	if e != nil {
-		log.Printf("File error: %v\n", e)
-		os.Exit(1)
-	}
-	var config Conf
-	json.Unmarshal(file, &config)
+	var configFile = flag.String("conf", "./conf.json", "The path to the configuration file")
+	flag.Parse()
+	log.Printf("loading config from: %s \n", *configFile)
+	config.LoadConfig(*configFile)
+	config := config.GetConfig()
 
 	log.Printf("loading rss list from: %s \n", config.General.Feedfile)
 	castsFile, e2 := ioutil.ReadFile(config.General.Feedfile)
 	if e2 != nil {
-		log.Printf("File error: %v\n", e2)
+		log.Printf("RSS list file error: %v\n", e2)
 		os.Exit(1)
 	}
 	var cs Casts
@@ -115,7 +84,6 @@ func main() {
 		//		log.Printf("%s (%s) is described as '%s' and is at %s \n", item.Name, item.Date, item.Desc, item.Url)
 		log.Printf("=================================================================\n")
 		log.Printf("%s (%s) \n", item.Name, item.Date)
-		feed.Process(item.Url, config.General.AudioDir, config.General.VisualDir)
+		feed.Process(item.Url)
 	}
-
 }

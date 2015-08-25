@@ -1,3 +1,11 @@
 conf.json
 casts.json
 **/*.swp
+rssnest
+test.html
+*.heap
+audio
+*.swo
+alreadyHave.json
+castsTest.json
+newData.json
