@@ -30,7 +30,24 @@ type Channel struct {
 	Items       []Item `xml:"item"`
 }
 
-func GetRSS(feedURL string) *Rss {
+type HTTPTraffic interface {
+	GetRSS(feedURL string) *Rss
+	DetectContentType(data []byte) string
+	Get(url string) (resp *http.Response, err error)
+}
+
+type StdTraffic struct {
+}
+
+func (h StdTraffic) DetectContentType(data []byte) string {
+	return http.DetectContentType(data)
+}
+
+func (h StdTraffic) Get(url string) (resp *http.Response, err error) {
+	return http.Get(url)
+}
+
+func (h StdTraffic) GetRSS(feedURL string) *Rss {
 
 	response, err := http.Get(feedURL)
 	if err != nil {
@@ -54,6 +71,5 @@ func GetRSS(feedURL string) *Rss {
 		log.Println(err)
 		return nil
 	}
-
 	return rss
 }

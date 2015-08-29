@@ -5,6 +5,7 @@ rssnest
 test.html
 *.heap
 audio
+visual
 *.swo
 alreadyHave.json
 castsTest.json

@@ -9,3 +9,5 @@ echo
 echo
 echo `date`
 echo "...end"
+echo "ok... running it"
+./rssnest

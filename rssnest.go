@@ -65,8 +65,7 @@ func main() {
 	var configFile = flag.String("conf", "./conf.json", "The path to the configuration file")
 	flag.Parse()
 	log.Printf("loading config from: %s \n", *configFile)
-	config.LoadConfig(*configFile)
-	config := config.GetConfig()
+	config := config.LoadConfig(*configFile)
 
 	log.Printf("loading rss list from: %s \n", config.General.Feedfile)
 	castsFile, e2 := ioutil.ReadFile(config.General.Feedfile)
@@ -78,12 +77,13 @@ func main() {
 	json.Unmarshal(castsFile, &cs)
 	log.Printf("%s feed created on %s \n", cs.Misc.User, cs.Misc.CreatedOn)
 
-	log.Printf("%v feeds \n", len(cs.Items))
+	total := len(cs.Items)
+	log.Printf("%v feeds \n", total)
 	for i := 0; i < len(cs.Items); i++ {
 		item := cs.Items[i]
 		//		log.Printf("%s (%s) is described as '%s' and is at %s \n", item.Name, item.Date, item.Desc, item.Url)
 		log.Printf("=================================================================\n")
-		log.Printf("%s (%s) \n", item.Name, item.Date)
+		log.Printf("[%v/%v] %s (%s) \n", i, total, item.Name, item.Date)
 		feed.Process(item.Url)
 	}
 }
