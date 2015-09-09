@@ -140,7 +140,7 @@ func Process(url string, howmany int) []RssResult {
 }
 
 func processAndPersist(url string, traffic HTTPTraffic, persist Persist, howmany int) []RssResult {
-	items := make([]RssResult, howmany)
+	var items []RssResult
 	rss := traffic.GetRSS(url)
 	if rss == nil {
 		log.Printf("No feed, all is done here\n")

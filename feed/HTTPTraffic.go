@@ -99,8 +99,6 @@ func (h StdTraffic) GetRSS(feedURL string) *Rss {
 		log.Println(err)
 		return nil
 	}
-	//	buffer := bytes.NewBuffer(make([]byte, 0, response.ContentLength))
-	//	buffer.ReadFrom(response.Body)
 
 	buffer := bytes.NewBuffer(XMLdata)
 	decoded := xml.NewDecoder(buffer)

@@ -93,8 +93,8 @@ func main() {
 	total := len(cs.Items)
 	log.Printf("%v feeds \n", total)
 
-	prices := make([]feed.GoldMoney, len(cs.Items))
-	newItems := make([]feed.RssResult, len(cs.Items))
+	var prices []feed.GoldMoney
+	var newItems []feed.RssResult
 	for i := 0; i < len(cs.Items); i++ {
 		item := cs.Items[i]
 		//		log.Printf("%s (%s) is described as '%s' and is at %s \n", item.Name, item.Date, item.Desc, item.Url)
