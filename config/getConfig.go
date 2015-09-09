@@ -37,9 +37,10 @@ type GeneralConf struct {
 }
 
 type FtpConf struct {
-	Url string
-	Usr string
-	Pw  string
+	Url  string
+	Port int
+	Usr  string
+	Pw   string
 }
 
 type TweetConf struct {
@@ -49,15 +50,16 @@ type TweetConf struct {
 	AccessTokenSecret string
 }
 
-type PropergateConf struct {
+type PropagateConf struct {
 	IncludePrice bool
 	Ftp          FtpConf
 	Tweet        TweetConf
+	Apikey       string
 }
 
 type Settings struct {
-	General    GeneralConf
-	Propergate PropergateConf
+	General   GeneralConf
+	Propagate PropagateConf
 }
 
 var settings Settings

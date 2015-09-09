@@ -8,5 +8,8 @@ audio
 visual
 *.swo
 alreadyHave.json
-castsTest.json
 newData.json
+web/public/jspm_packages
+rssnest.log
+web/public/config.js
+data

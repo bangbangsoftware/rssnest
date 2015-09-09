@@ -41,6 +41,7 @@ func (fs FileStore) loadItems(dir string) {
 			os.Exit(1)
 		}
 	}
+	data = []byte("var data = \n")
 	json.Unmarshal(file, &fs.GotAlready)
 	log.Printf("already have list is: %v \n", len(fs.GotAlready))
 	ioutil.WriteFile(dir+"newData.json", data, fs.Perm)
