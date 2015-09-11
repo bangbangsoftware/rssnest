@@ -1,10 +1,9 @@
 package feed
 
 import (
-	"bytes"
+	//	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"os"
 	"strings"
@@ -24,19 +23,48 @@ type RssResult struct {
 	Message     string
 }
 
-func processContent(body io.ReadCloser, name string, traffic HTTPTraffic, r RssResult) RssResult {
-	data, err := ioutil.ReadAll(body)
-	if err != nil {
-		r.Failed = true
-		r.FailReason = "Cannot read content from rss"
-		log.Println("Cannot read content from rss, %v\n", err)
-		return r
-	}
-	var t = traffic.DetectContentType(data)
+func processContent(t string, body io.ReadCloser, name string, traffic HTTPTraffic, r RssResult) RssResult {
+	defer body.Close()
+	//data, err := ioutil.ReadAll(body)
+	//if err != nil {
+	//	r.Failed = true
+	//	r.FailReason = "Cannot read content from rss"
+	//	log.Println("Cannot read content from rss, %v\n", err)
+	//	return r
+	//}
+	//ioutil.ReadAll starts at a very small 512
+	//it really should let you specify an initial size
+	/*
+		log.Printf("First buffer creating")
+		buffer := bytes.NewBuffer(make([]byte, 0, 65536))
+		log.Printf("First buffer created")
+		log.Printf("Copying body to buffer")
+		io.Copy(buffer, body)
+		log.Printf("Copyed body to buffer")
+		log.Printf("buffer to temp")
+		temp := buffer.Bytes()
+		log.Printf("buffer to temp DONE")
+		buffer = nil
+		length := len(temp)
+		var data []byte
+		//are we wasting more than 10% space?
+		log.Printf("weird if")
+		if cap(temp) > (length + length/10) {
+			log.Printf("wasting")
+			data = make([]byte, length)
+			copy(data, temp)
+		} else {
+			log.Printf("NOT wasting")
+			data = temp
+		}
+		log.Printf("weird if DONE")
+		temp = nil
+	*/
+	//	var t = traffic.DetectContentType(body)
 	log.Printf("%s which is %s content type \n", name, t)
-	if strings.Contains(t, "text/html") {
-		log.Println("Rss content is html, nothing to download\n")
-		r.Message = "Rss content his html, nothing to download"
+	if strings.Contains(t, "text/html") || strings.Contains(t, "text/xml") {
+		log.Println("Rss content type is text, nothing to download\n")
+		r.Message = "Rss content type is text, nothing to download"
 		return r
 	}
 
@@ -55,15 +83,20 @@ func processContent(body io.ReadCloser, name string, traffic HTTPTraffic, r RssR
 		return r
 	}
 
-	buffer := bytes.NewBuffer(data)
-	n, err := io.Copy(out, buffer)
+	//	buf := bytes.NewBuffer(data)
+	//	data = nil
+	//	n, err := io.Copy(out, buf)
+	n, err := io.Copy(out, body)
+	//	buf = nil
 	if err != nil {
-		log.Println("Error downloading content: %v\n", err)
+		log.Println("Error copying content to file: %v\n", err)
 		r.Failed = true
-		r.FailReason = "Error downloading content"
+		r.FailReason = "Error copying content to file"
 		return r
 	}
-	log.Println("Downloaded %v bytes", n)
+	log.Println("Downloaded ", n, " bytes")
+	out = nil
+
 	r.Message = fmt.Sprintf("%v Downloaded %v bytes", r.Message, n)
 	return r
 }
@@ -127,7 +160,9 @@ func checkAndGet(i int, item Item, store Persist, traffic HTTPTraffic) RssResult
 
 	var name = getName(link)
 	defer response.Body.Close()
-	result := processContent(response.Body, name, traffic, r)
+	log.Printf("response (%v) \n", response.Header)
+	var t = response.Header.Get("Content-Type")
+	result := processContent(t, response.Body, name, traffic, r)
 	store.Save(item, link, dataDir)
 	return result
 }

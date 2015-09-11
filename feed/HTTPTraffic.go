@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"encoding/xml"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 )
@@ -71,37 +71,70 @@ func (h StdTraffic) Shorten(feedURL string, apiKey string) *ShortURL {
 		return short
 	}
 	defer response.Body.Close()
-	var body = response.Body
-	log.Println("short return is, %v\n", body)
+	/*
+				var body = response.Body
+				log.Println("short return is, %v\n", body)
 
-	data, err := ioutil.ReadAll(body)
-	if err != nil {
-		short.Err = err
-		log.Println("Cannot read content from shortener, %v\n", err)
-		return short
+		//		data, err := ioutil.ReadAll(body)
+				if err != nil {
+					short.Err = err
+					log.Println("Cannot read content from shortener, %v\n", err)
+					return short
+				}
+				json.Unmarshal([]byte(data), &short)
+	*/
+
+	//ioutil.ReadAll starts at a very small 512
+	//it really should let you specify an initial size
+	buffer := bytes.NewBuffer(make([]byte, 0, 65536))
+	io.Copy(buffer, response.Body)
+	temp := buffer.Bytes()
+	length := len(temp)
+	var data []byte
+	//are we wasting more than 10% space?
+	if cap(temp) > (length + length/10) {
+		data = make([]byte, length)
+		copy(data, temp)
+	} else {
+		data = temp
 	}
-	json.Unmarshal([]byte(data), &short)
+	json.Unmarshal(data, &short)
+
 	return short
 
 }
 
 func (h StdTraffic) GetRSS(feedURL string) *Rss {
 
-	response, err := http.Get(feedURL)
+	r, err := http.Get(feedURL)
 	if err != nil {
 		log.Println(err)
 		return nil
 	}
-	defer response.Body.Close()
+	defer r.Body.Close()
 
-	XMLdata, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		log.Println(err)
-		return nil
+	//ioutil.ReadAll starts at a very small 512
+	//it really should let you specify an initial size
+	buffer := bytes.NewBuffer(make([]byte, 0, 65536))
+	io.Copy(buffer, r.Body)
+	temp := buffer.Bytes()
+	length := len(temp)
+	var XMLdata []byte
+	//are we wasting more than 10% space?
+	if cap(temp) > (length + length/10) {
+		XMLdata = make([]byte, length)
+		copy(XMLdata, temp)
+	} else {
+		XMLdata = temp
 	}
+	//	XMLdata, err := ioutil.ReadAll(response.Body)
+	//	if err != nil {
+	//		log.Println(err)
+	//		return nil
+	//	}
 
-	buffer := bytes.NewBuffer(XMLdata)
-	decoded := xml.NewDecoder(buffer)
+	buf := bytes.NewBuffer(XMLdata)
+	decoded := xml.NewDecoder(buf)
 
 	rss := new(Rss)
 	err = decoded.Decode(rss)

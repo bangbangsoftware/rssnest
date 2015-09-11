@@ -93,7 +93,7 @@ func main() {
 	total := len(cs.Items)
 	log.Printf("%v feeds \n", total)
 
-	var prices []feed.GoldMoney
+	prices := feed.GetPrices()
 	var newItems []feed.RssResult
 	for i := 0; i < len(cs.Items); i++ {
 		item := cs.Items[i]
@@ -113,12 +113,6 @@ func main() {
 		}
 		log.Printf("%v total items found ", len(newItems))
 
-		spot := feed.GetPrices()
-		//		copy(prices, spot)
-		for _, e := range spot {
-			prices = append(prices, e)
-		}
-		//log.Printf("Spot is (%v) %v", len(prices), spot)
 		log.Printf("\n")
 	}
 	if len(newItems) == 0 {
@@ -158,8 +152,11 @@ func saveAndFtp(newItems []feed.RssResult, prices []feed.GoldMoney, config confi
 	}
 
 	log.Printf("saving prices (%v) file to ftp to webserver\n\n\n", len(prices))
+	var data3 = []byte("var prices = \n")
 	jsave2, _ := json.Marshal(prices)
-	var data3 []byte = jsave2
+	for _, e := range jsave2 {
+		data3 = append(data3, e)
+	}
 	ioutil.WriteFile(config.General.DataDir+"prices.json", data3, perm)
 	var pricesFile *os.File
 	if pricesFile, err = os.Open(config.General.DataDir + "prices.json"); err != nil {
