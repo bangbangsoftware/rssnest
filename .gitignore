@@ -13,3 +13,4 @@ web/public/jspm_packages
 rssnest.log
 web/public/config.js
 data
+web/public/prices.json

@@ -58,7 +58,7 @@ func getIt(feedURL string) GoldMoney {
 }
 
 func GetPrices() []GoldMoney {
-	price := make([]GoldMoney, 2)
+	var price []GoldMoney
 	goldFeed := feedURL + "ounces"
 	silverFeed := feedURL + "grams"
 	price = append(price, getIt(goldFeed))

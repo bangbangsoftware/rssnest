@@ -1,5 +1,28 @@
 // Redo another page with the error?
 
+function f(i){
+    if (i > 9){
+        return ""+i;
+    }
+    return "0"+i;
+}
+
+function t(w){
+    var s = w+"";    
+    var i = s.indexOf(".");
+    return s.substring(0,i+3);
+}
+
+function p(){
+    console.log("prices");
+    console.log(prices);
+    var ps = prices;
+    var silver = t(ps[0].SpotPrices[1].SpotPrice);
+    console.log("sliver "+silver);
+    var gold = t(ps[1].SpotPrices[0].SpotPrice);
+    return `${gold}/gg, ${silver}/oz (28.0024/gg - 16.8322/oz)` 
+}
+
 function replaceTag(filt, id, includeFail) {
 
     var items = data.filter(function(post) {
@@ -7,12 +30,14 @@ function replaceTag(filt, id, includeFail) {
     }).map(function(post) {
         var ad = new Date(post.Date);
         
-        var stDate = `${ad.getDate()}/${ad.getMonth()+1}/${ad.getFullYear()} ${ad.getHours()}:${ad.getMinutes()}`;   
+        var stDate = `${f(ad.getDate())}-${f(ad.getMonth()+1)}-${ad.getFullYear()} ${ad.getHours()}:${f(ad.getMinutes())}`;   
+        var gold = p();
         var head = `<div class="demo-card-wide mdl-card mdl-shadow--2dp">
               <div class="mdl-card__title">
-                <h1 title="${post.Name}" class="mdl-card__title-text">${post.Item.Title}</h1></br>
+                <h5 class="mdl-card__title-text">${post.Name}:</h5></br>
+                <h1 title="${post.Name}" class="mdl-card__title-text"><b>${post.Item.Title}</b></h1></br>
               </div>
-                <h8>(${stDate})</h8></br>`;
+                <h8>${stDate} - ${gold}</h8></br>`;
         if (includeFail) {
             head = `${head}<h3> ${post.FailReason}</h3>`;
         }
