@@ -26,6 +26,7 @@ type Item struct {
 	Url   string
 	Date  string
 	Error string
+	Dir   string
 }
 
 type CastsTest struct {
@@ -97,14 +98,15 @@ func main() {
 	var newItems []feed.RssResult
 	for i := 0; i < len(cs.Items); i++ {
 		item := cs.Items[i]
+		name := item.Name
 		//		log.Printf("%s (%s) is described as '%s' and is at %s \n", item.Name, item.Date, item.Desc, item.Url)
 		log.Printf("=================================================================\n")
-		log.Printf("[%v/%v] %s (%s) \n", i, total, item.Name, item.Date)
-		items := feed.Process(item.Url, 1)
+		log.Printf("[%v/%v] %s (%s) \n", i, total, name, item.Date)
+		items := feed.Process(name, item.Url, item.Dir, 1)
 
 		log.Printf("%v more items found ", len(items))
 		for _, e := range items {
-			e.Name = item.Name
+			e.Name = name
 			title := e.Item.Title
 			if !e.Failed && !e.AlreadyHave {
 				tweet(title, e.Link, config)
@@ -119,7 +121,8 @@ func main() {
 		log.Printf("No new data overall\n")
 		return
 	}
-	saveAndFtp(newItems, prices, config)
+	lastOnes := feed.GetLast(20)
+	saveAndFtp(lastOnes, prices, config)
 }
 
 func saveAndFtp(newItems []feed.RssResult, prices []feed.GoldMoney, config config.Settings) {

@@ -10,16 +10,13 @@ import (
 
 type Persist interface {
 	AlreadyHave(itemLink string, dir string) bool
-	Save(item Item, link string, dir string)
+	Save(item RssResult, link string, dir string)
+	GetLast(i int) []RssResult
 }
 
 type FileStore struct {
-	//	gotAlready map[string]Item make(map[string]Item)
-	GotAlready map[string]Item
-	JustGot    []Item
-	Prices     [][]GoldMoney
-
-	Perm os.FileMode
+	GotAlready map[string]RssResult
+	Perm       os.FileMode
 }
 
 func (fs FileStore) loadItems(dir string) {
@@ -29,7 +26,7 @@ func (fs FileStore) loadItems(dir string) {
 	var data []byte
 	fs.Perm = 0777
 	if fs.GotAlready == nil {
-		fs.GotAlready = make(map[string]Item)
+		fs.GotAlready = make(map[string]RssResult)
 	}
 
 	if e != nil {
@@ -41,32 +38,31 @@ func (fs FileStore) loadItems(dir string) {
 			os.Exit(1)
 		}
 	}
-	data = []byte("var data = \n")
 	json.Unmarshal(file, &fs.GotAlready)
 	log.Printf("already have list is: %v \n", len(fs.GotAlready))
-	ioutil.WriteFile(dir+"newData.json", data, fs.Perm)
 }
 
-func (fs FileStore) Save(item Item, link string, dir string) {
+func (fs FileStore) Save(rssResult RssResult, link string, dir string) {
 	log.Printf("saving alreadyHave file\n")
-	fs.GotAlready[link] = item
+	fs.GotAlready[link] = rssResult
 	jsave, _ := json.Marshal(fs.GotAlready)
 	var data []byte = jsave
 	ioutil.WriteFile(dir+"alreadyHave.json", data, fs.Perm)
+}
 
-	log.Printf("saving newData file to ftp to webserver\n")
-	fs.JustGot = append(fs.JustGot, item)
-	jsave, _ = json.Marshal(fs.JustGot)
-	var data2 []byte = jsave
-	ioutil.WriteFile(dir+"newData.json", data2, fs.Perm)
+func reverseMap(m map[string]RssResult, size int) []RssResult {
+	n := make([]RssResult, size)
+	for _, v := range m {
+		n = append(n, v)
+		if len(n) == size {
+			return n
+		}
+	}
+	return n
+}
 
-	log.Printf("saving prices file to ftp to webserver\n\n\n")
-	spot := GetPrices()
-	log.Printf("Spot is %v", spot)
-	fs.Prices = append(fs.Prices, spot)
-	jsave, _ = json.Marshal(fs.Prices)
-	var data3 []byte = jsave
-	ioutil.WriteFile(dir+"prices.json", data3, fs.Perm)
+func (fs FileStore) GetLast(i int) []RssResult {
+	return reverseMap(fs.GotAlready, i)
 }
 
 func (fs FileStore) AlreadyHave(itemLink string, dir string) bool {

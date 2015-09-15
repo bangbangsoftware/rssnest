@@ -11,4 +11,4 @@ echo `date`
 echo "...end"
 echo "ok... running it"
 ./rssnest
-cp ./data/newData.json ~/work/rnview/html/newData.json
+cp ./data/newData.json ./web/public/newData.json

@@ -19,3 +19,4 @@ go test -cover
 echo "6. scp on to pi"
 scp rssnest osmc@osmc:./rssnest/.
 scp conf.json osmc@osmc:./rssnest/.
+scp casts.json osmc@osmc:./rssnest/data/.

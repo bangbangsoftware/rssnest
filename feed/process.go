@@ -76,7 +76,7 @@ func getName(link string) string {
 	return dir + name
 }
 
-func checkAndGet(i int, item Item, store Persist, traffic HTTPTraffic) RssResult {
+func checkAndGet(i int, item Item, store Persist, traffic HTTPTraffic, dir string) RssResult {
 	conf := config.GetConfig()
 	dataDir := conf.General.DataDir
 	var r RssResult
@@ -117,23 +117,28 @@ func checkAndGet(i int, item Item, store Persist, traffic HTTPTraffic) RssResult
 		return r
 	}
 
-	name := getName(link)
+	name := dir + getName(link)
 	defer response.Body.Close()
 	log.Printf("response (%v) \n", response.Header)
 	t := response.Header.Get("Content-Type")
 	result := processContent(t, response.Body, name, traffic, r)
-	store.Save(item, link, dataDir)
+	store.Save(result, link, dataDir)
 	return result
 }
 
-var fs Persist = FileStore{itemMap, nil, nil, 0777}
-var itemMap = make(map[string]Item)
+var fs Persist = FileStore{itemMap, 0777}
+var itemMap = make(map[string]RssResult)
+var traf = new(StdTraffic)
 
-func Process(url string, howmany int) []RssResult {
-	return processAndPersist(url, new(StdTraffic), fs, howmany)
+func Process(name string, url string, dir string, howmany int) []RssResult {
+	return processAndPersist(name, url, traf, fs, dir, howmany)
 }
 
-func processAndPersist(url string, traffic HTTPTraffic, persist Persist, howmany int) []RssResult {
+func GetLast(i int) []RssResult {
+	return fs.GetLast(i)
+}
+
+func processAndPersist(name string, url string, traffic HTTPTraffic, persist Persist, dir string, howmany int) []RssResult {
 	var items []RssResult
 	rss := traffic.GetRSS(url)
 	if rss == nil {
@@ -155,7 +160,8 @@ func processAndPersist(url string, traffic HTTPTraffic, persist Persist, howmany
 	for i := 0; i < howmany; i++ {
 		if i < len(rss.Channel.Items) {
 			item := rss.Channel.Items[i]
-			result := checkAndGet(i, item, persist, traffic)
+			result := checkAndGet(i, item, persist, traffic, dir)
+			result.Name = name
 			if result.AlreadyHave {
 				log.Printf("got it already....")
 			} else {
