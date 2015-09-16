@@ -106,7 +106,6 @@ func main() {
 
 		log.Printf("%v more items found ", len(items))
 		for _, e := range items {
-			e.Name = name
 			title := e.Item.Title
 			if !e.Failed && !e.AlreadyHave {
 				tweet(title, e.Link, config)

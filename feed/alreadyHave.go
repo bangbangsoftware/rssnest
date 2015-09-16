@@ -51,11 +51,11 @@ func (fs FileStore) Save(rssResult RssResult, link string, dir string) {
 }
 
 func reverseMap(m map[string]RssResult, size int) []RssResult {
-	n := make([]RssResult, size)
+	var n []RssResult
 	for _, v := range m {
 		n = append(n, v)
-		if len(n) == size {
-			return n
+		if len(n) >= size {
+			break
 		}
 	}
 	return n

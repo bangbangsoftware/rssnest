@@ -61,7 +61,7 @@ func processContent(t string, body io.ReadCloser, name string, traffic HTTPTraff
 	return r
 }
 
-func getName(link string) string {
+func getName(subdir string, link string) string {
 	conf := config.GetConfig()
 	audioDir := conf.General.AudioDir
 	visualDir := conf.General.VisualDir
@@ -71,7 +71,7 @@ func getName(link string) string {
 	var dir = audioDir
 	if strings.HasSuffix(name, "mp4") || strings.HasSuffix(name, "mv4") {
 		log.Println("Visual content\n")
-		dir = visualDir
+		dir = visualDir + subdir
 	}
 	return dir + name
 }
@@ -117,7 +117,7 @@ func checkAndGet(feedName string, i int, item Item, store Persist, traffic HTTPT
 		return r
 	}
 
-	name := dir + getName(link)
+	name := getName(dir, link)
 	defer response.Body.Close()
 	log.Printf("response (%v) \n", response.Header)
 	t := response.Header.Get("Content-Type")
