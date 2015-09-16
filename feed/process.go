@@ -76,7 +76,7 @@ func getName(link string) string {
 	return dir + name
 }
 
-func checkAndGet(i int, item Item, store Persist, traffic HTTPTraffic, dir string) RssResult {
+func checkAndGet(feedName string, i int, item Item, store Persist, traffic HTTPTraffic, dir string) RssResult {
 	conf := config.GetConfig()
 	dataDir := conf.General.DataDir
 	var r RssResult
@@ -122,6 +122,7 @@ func checkAndGet(i int, item Item, store Persist, traffic HTTPTraffic, dir strin
 	log.Printf("response (%v) \n", response.Header)
 	t := response.Header.Get("Content-Type")
 	result := processContent(t, response.Body, name, traffic, r)
+	result.Name = feedName
 	store.Save(result, link, dataDir)
 	return result
 }
@@ -160,8 +161,7 @@ func processAndPersist(name string, url string, traffic HTTPTraffic, persist Per
 	for i := 0; i < howmany; i++ {
 		if i < len(rss.Channel.Items) {
 			item := rss.Channel.Items[i]
-			result := checkAndGet(i, item, persist, traffic, dir)
-			result.Name = name
+			result := checkAndGet(name, i, item, persist, traffic, dir)
 			if result.AlreadyHave {
 				log.Printf("got it already....")
 			} else {
