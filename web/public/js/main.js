@@ -66,6 +66,9 @@ function replaceTag(filt, id, includeFail) {
     items.forEach(function(l) {
         allHTML = `${allHTML}${l}`;
     });
+    if (allHTML.length === 0){
+        allHTML = "No, nothing, nada... nope";
+    }
     var elem = document.querySelector(id);
     if (elem != null) {
         elem.innerHTML = allHTML;
