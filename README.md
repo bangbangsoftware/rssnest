@@ -38,7 +38,7 @@ And ftp these files on to the webserver keeping the directory structure:
 * ./js/main.js
 
 
-That should do it...
+That should do it, add it to a cronjob and go and consume the content.
 
 Stop the growth
 ===============
