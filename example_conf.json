@@ -1,13 +1,12 @@
 {
     "general": {
-        "sleep": 600,
         "feedfile": "./castsTest.json",
         "audioDir": "./audio/",
         "visualDir": "./visual/",
         "dataDir": "./"
     },
     "propagate": {
-        "includePrice": true,
+        "qtyPerPage": 20,    
         "ftp": {
             "url": "www.myfreeisp.net",
             "port": 21,

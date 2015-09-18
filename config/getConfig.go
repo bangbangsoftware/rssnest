@@ -29,7 +29,6 @@ type Casts struct {
 }
 
 type GeneralConf struct {
-	Sleep     int
 	Feedfile  string
 	AudioDir  string
 	VisualDir string
@@ -51,10 +50,10 @@ type TweetConf struct {
 }
 
 type PropagateConf struct {
-	IncludePrice bool
-	Ftp          FtpConf
-	Tweet        TweetConf
-	Apikey       string
+	QtyPerPage int
+	Ftp        FtpConf
+	Tweet      TweetConf
+	Apikey     string
 }
 
 type Settings struct {

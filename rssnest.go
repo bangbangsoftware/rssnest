@@ -38,32 +38,6 @@ type Casts struct {
 	Items []Item
 }
 
-//type ItemConf struct {
-//
-//}
-
-//type Config struct {
-//        General  GeneralConf
-//        Items []ItemConf
-//}
-// usage: %s start|stop|restart
-
-// 0. Load config
-// 1. set timeout to  minutes in config
-// 2. parse opml
-// 3. foreach
-// 4.   get date
-// 5.   parse feed
-// 6.   get url
-// 7.   do we already have url?
-// 8.     compile html
-// 9.     download
-//10.     put in correct dir based on content type
-//11.     gold and silver price
-//12.     compile html
-//13.     ftp html
-//14.     tweet
-
 func main() {
 	go func() {
 		log.Println(http.ListenAndServe("localhost:6060", nil))
@@ -120,7 +94,7 @@ func main() {
 		log.Printf("No new data overall\n")
 		return
 	}
-	lastOnes := feed.GetLast(20)
+	lastOnes := feed.GetLast(config.Propagate.QtyPerPage)
 	saveAndFtp(lastOnes, prices, config)
 }
 
