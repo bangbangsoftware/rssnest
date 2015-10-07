@@ -133,8 +133,8 @@ func TestPutInDateOrder(t *testing.T) {
 			t.Error("Expected '" + res[no].Item.Title + "' to equal '" + title + "'")
 		}
 	}
-	check(0, data.Item.Title)
-	check(1, data2.Item.Title)
+	check(0, data2.Item.Title)
+	check(1, data.Item.Title)
 	check(2, data3.Item.Title)
 	check(3, data4.Item.Title)
 	check(4, data5.Item.Title)
