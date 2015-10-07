@@ -12,9 +12,9 @@ goimports -w **/*.go
 echo "3. Vetting"
 go vet
 echo "4. Building"
-go build rssnest.go
+go build -o rssnest 
 echo "5. Testing (with coverage)"
-go test -cover
+go test ./.. -cover
 
 echo "6. scp on to pi"
 scp rssnest osmc@osmc:./rssnest/.

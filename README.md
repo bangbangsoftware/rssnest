@@ -52,5 +52,5 @@ TODO
 
 * Stop the growth
 * Refactor
-* Write some tests
+* Write some more tests
 * Write a quick go program to help ftp the assets to webserver?

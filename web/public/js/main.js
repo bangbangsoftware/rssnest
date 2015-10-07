@@ -17,8 +17,12 @@ function p() {
     console.log("prices");
     console.log(prices);
     var ps = prices;
-    var silver = t(ps[0].SpotPrices[1].SpotPrice);
-    var gold = t(ps[1].SpotPrices[0].SpotPrice);
+    var silver = "?";
+    var gold = "?";
+    if (ps[0].SpotPrices != null) {
+        sliver = t(ps[0].SpotPrices[1].SpotPrice);
+        gold = t(ps[1].SpotPrices[0].SpotPrice);
+    }
     return `${gold}/gg, ${silver}/oz (28.0024/gg - 16.8322/oz)`
 }
 
@@ -28,12 +32,12 @@ function replaceTag(filt, id, includeFail) {
     var cnt = 1;
     var items = data.filter(function(post) {
         return filt(post);
-    }).sort(function(p1,p2) {
+    }).sort(function(p1, p2) {
         var p1d = new Date(p1.Date);
         var p2d = new Date(p2.Date);
-        if (p1d > p2d){
+        if (p1d > p2d) {
             return -1;
-        } else if (p2d >p1d){
+        } else if (p2d > p1d) {
             return 1;
         }
         return 0;
@@ -66,7 +70,7 @@ function replaceTag(filt, id, includeFail) {
     items.forEach(function(l) {
         allHTML = `${allHTML}${l}`;
     });
-    if (allHTML.length === 0){
+    if (allHTML.length === 0) {
         allHTML = "No, nothing, nada... nope";
     }
     var elem = document.querySelector(id);

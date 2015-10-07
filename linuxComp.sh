@@ -8,5 +8,5 @@ export GOOS=linux
 export GOPATH=/home/mick/work/rssnest
 
 echo "2. Building"
-go build rssnest.go
+go build -o rssnest
 

@@ -1,4 +1,4 @@
-package feed
+package feeds
 
 import (
 	"bytes"
@@ -22,24 +22,14 @@ type Spot struct {
 
 var feedURL = "http://ws.goldmoney.com/metal/prices/currentSpotPrices?currency=gbp&units="
 
-func getIt(feedURL string) GoldMoney {
+func getIt(url string) GoldMoney {
 	var price GoldMoney
-	response, err := http.Get(feedURL)
+	response, err := http.Get(url)
 	if err != nil {
 		log.Println(err)
 		return price
 	}
 	defer response.Body.Close()
-	/*
-		//data, err := ioutil.ReadAll(response.Body)
-		if err != nil {
-			log.Println(err)
-			return price
-		}
-		json.Unmarshal(data, &price)
-	*/
-	//ioutil.ReadAll starts at a very small 512
-	//it really should let you specify an initial size
 	buffer := bytes.NewBuffer(make([]byte, 0, 65536))
 	io.Copy(buffer, response.Body)
 	temp := buffer.Bytes()

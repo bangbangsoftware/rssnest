@@ -6,33 +6,12 @@ import (
 	"log"
 )
 
-type Misc struct {
-	User      string
-	CreatedOn string
-}
-
-type Item struct {
-	Name  string
-	Desc  string
-	Url   string
-	Date  string
-	Error string
-}
-
-type CastsTest struct {
-	Misc Misc
-}
-
-type Casts struct {
-	Misc  Misc
-	Items []Item
-}
-
 type GeneralConf struct {
 	Feedfile  string
 	AudioDir  string
 	VisualDir string
 	DataDir   string
+	StoreName string
 }
 
 type FtpConf struct {
