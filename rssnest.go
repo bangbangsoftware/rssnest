@@ -12,11 +12,14 @@ import (
 	"os"
 )
 
+var term bool = false
+
 func setup() {
 	//Switches
-	var memoryPort = flag.Int("mem", -1, "Turn memory listener on this port")
-	var configFile = flag.String("conf", "./conf.json", "The path to the configuration file")
-	var sendAssets = flag.Bool("ftp", false, "FTP the assets to the webserver")
+	memoryPort := flag.Int("mem", -1, "Turn memory listener on this port")
+	configFile := flag.String("conf", "./conf.json", "The path to the configuration file")
+	sendAssets := flag.Bool("ftp", false, "FTP the assets to the webserver")
+	term = *flag.Bool("term", false, "Just log to the terminal")
 	flag.Parse()
 
 	// memory
@@ -40,21 +43,29 @@ func setup() {
 }
 
 func main() {
-	// Logging
-	f, err := os.OpenFile("rssnest.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	if err != nil {
-		log.Fatalf("error opening file: %v", err)
-	}
-	defer f.Close()
-	log.SetOutput(f)
 
 	setup()
 
-	var store = new(FileStore)
-	var source = new(HttpSource)
+	// Logging
+	if term {
+		log.Printf("logging to terminal \n")
+	} else {
+		log.Printf("logging to rssnest.log \n")
+		f, err := os.OpenFile("rssnest.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+		if err != nil {
+			log.Fatalf("error opening file: %v", err)
+		}
+		defer f.Close()
+		log.SetOutput(f)
+	}
+
+	store := new(FileStore)
+	source := new(HttpSource)
 	feeds.StoreNewContent(store, source)
 
-	var target = new(FtpTarget)
-	var short = new(GoogleShort)
-	Propagate(store, target, short)
+	target := new(FtpTarget)
+	short := new(GoogleShort)
+	conf := config.GetConfig()
+	prices := feeds.GetPrices()
+	Propagate(store, target, prices, short, conf)
 }

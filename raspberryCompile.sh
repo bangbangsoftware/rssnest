@@ -14,9 +14,9 @@ go vet
 echo "4. Building"
 go build -o rssnest 
 echo "5. Testing (with coverage)"
-go test ./.. -cover
+go test  -cover
 
 echo "6. scp on to pi"
 scp rssnest osmc@osmc:./rssnest/.
 scp conf.json osmc@osmc:./rssnest/.
-scp casts.json osmc@osmc:./rssnest/data/.
+scp ./data/casts.json osmc@osmc:./rssnest/data/.

@@ -12,6 +12,8 @@ import (
 
 var GotAlready map[string]feeds.RssResult
 var toMessage []feeds.RssResult
+
+//var newStore []feeds.RssResult
 var Perm os.FileMode = 0777
 
 type FileStore struct {
