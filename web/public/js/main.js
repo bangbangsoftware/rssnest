@@ -17,18 +17,24 @@ function p() {
     console.log("prices");
     console.log(prices);
     var ps = prices;
-    var silver = "?";
-    var gold = "?";
     if (ps[0].SpotPrices != null) {
-        sliver = t(ps[0].SpotPrices[1].SpotPrice);
-        gold = t(ps[1].SpotPrices[0].SpotPrice);
+        var ag = t(ps[0].SpotPrices[1].SpotPrice);
+        var gold = t(ps[1].SpotPrices[0].SpotPrice);
+        if (ag && gold) {
+            return `${gold}/gg, ${ag}/oz (28.0024/gg - 16.8322/oz)`;
+        }
     }
-    return `${gold}/gg, ${silver}/oz (28.0024/gg - 16.8322/oz)`
+    return "?/gg, ?/oz (28,17)";
 }
 
 function replaceTag(filt, id, includeFail) {
 
-    var gold = p();
+    var gold = "?/gg, ?/oz (28,17)";
+    try {
+        gold = p();
+    } catch (err) {
+        console.log(err);
+    }
     var cnt = 1;
     var items = data.filter(function(post) {
         return filt(post);
@@ -58,7 +64,7 @@ function replaceTag(filt, id, includeFail) {
         var body = `
               <div align="left" class="mdl-card__supporting-text">${post.Item.Description}</div>
               <div class="mdl-card__actions mdl-card--border">
-                <a title='${post.Message}' target='_blank' href='${post.Link}' 
+                <a title='${post.Message}' target='_blank' href='${post.Item.Link}' 
                    class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Link</a>
               </div>
             </div>
