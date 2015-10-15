@@ -77,10 +77,13 @@ function replaceTag(filt, id, includeFail) {
         allHTML = `${allHTML}${l}`;
     });
     if (allHTML.length === 0) {
+        console.log("No content?!");
         allHTML = "No, nothing, nada... nope";
     }
     var elem = document.querySelector(id);
-    if (elem != null) {
+    if (elem == null) {
+        console.log("Cannot find element with '"+id+"'");
+    } else {        
         elem.innerHTML = allHTML;
     }
 }
