@@ -20,7 +20,8 @@ type Spot struct {
 	Units     string
 }
 
-var feedURL = "http://ws.goldmoney.com/metal/prices/currentSpotPrices?currency=gbp&units="
+//var feedURL = "http://ws.goldmoney.com/metal/prices/currentSpotPrices?currency=gbp&units="
+var feedURL = "https://wealth.goldmoney.com/api/prices/currentSpotPrices/?currency=gbp&price=ask&units="
 
 func getIt(url string) GoldMoney {
 	var price GoldMoney
