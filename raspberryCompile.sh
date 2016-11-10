@@ -11,11 +11,12 @@ cp *.go src/github.com/bangbangsoftware/.
 cp -r feeds src/github.com/bangbangsoftware/.
 cp -r config src/github.com/bangbangsoftware/.
 
-go build FileStore
+go build propergate.go 
+go build shortener.go
+go build ftpTarget.go 
 go build fileStore.go 
 go build httpSource.go 
-go build ftpTarget.go 
-go build propergate.go 
+go build rssnest.go
 
 echo "Compiling for the raspberry pi"
 

@@ -53,6 +53,8 @@ func GetPrices() []GoldMoney {
 	goldFeed := feedURL + "ounces"
 	silverFeed := feedURL + "grams"
 	price = append(price, getIt(goldFeed))
+	log.Printf("Gold : %s\n", price)
 	price = append(price, getIt(silverFeed))
+	log.Printf("Silver : %s\n", price)
 	return price
 }

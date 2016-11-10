@@ -28,6 +28,10 @@ type Casts struct {
 }
 
 func loadRSSList(conf config.Settings) Casts {
+	log.Printf("\n")
+	log.Printf("\n")
+	log.Printf("\n")
+	log.Printf("\n*****************************************************************\n")
 	log.Printf("loading rss list from: %s \n", conf.General.Feedfile)
 	castsFile, e2 := ioutil.ReadFile(conf.General.Feedfile)
 	if e2 != nil {
@@ -54,5 +58,4 @@ func StoreNewContent(store Store, source Source) {
 		log.Printf("[%v/%v] %s (%s) \n", i, total, name, item.Date)
 		Leach(item, store, source, 1)
 	}
-
 }

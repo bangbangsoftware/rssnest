@@ -27,7 +27,7 @@ func (s FtpTarget) Send(newItems []feeds.RssResult, prices []feeds.GoldMoney) {
 	var err error
 	var ftp *goftp.FTP
 
-	log.Printf("saving newData (%v) file to ftp to %v\n", len(newItems), conf.Propagate.Ftp.Url)
+	log.Printf("...saving newData (%v) file to ftp to %v\n", len(newItems), conf.Propagate.Ftp.Url)
 	var newData = []byte("var data = \n")
 	jsave, _ := json.Marshal(newItems)
 	for _, e := range jsave {
@@ -47,9 +47,11 @@ func (s FtpTarget) Send(newItems []feeds.RssResult, prices []feeds.GoldMoney) {
 	if err = ftp.Login(conf.Propagate.Ftp.Usr, conf.Propagate.Ftp.Pw); err != nil {
 		panic(err)
 	}
-	if err := ftp.Stor("newData.json", file); err != nil {
-		panic(err)
-	}
+// This is failing for some reason????    
+// One line curl seems to do it....    curl -T newData.json ftp://blarblar.net --user fred:donttell 
+//	if err := ftp.Stor("newData.json", file); err != nil {
+//		panic(err)
+//	}
 
 	log.Printf("saving prices (%v) file to ftp to webserver\n\n\n", len(prices))
 	var data3 = []byte("var prices = \n")
@@ -63,9 +65,11 @@ func (s FtpTarget) Send(newItems []feeds.RssResult, prices []feeds.GoldMoney) {
 		panic(err)
 	}
 	defer pricesFile.Close()
-	if err := ftp.Stor("prices.json", pricesFile); err != nil {
-		panic(err)
-	}
+// This is failing for some reason????    
+// One line curl seems to do it....    curl -T price.json ftp://blarblar.net --user fred:donttell 
+//	if err := ftp.Stor("prices.json", pricesFile); err != nil {
+//		panic(err)
+//	}
 }
 
 func (s FtpTarget) Message(util Shortener, msg string, url string) {
