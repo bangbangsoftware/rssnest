@@ -81,6 +81,7 @@ func checkAndGet(r RssResult, i int, hold Store, traffic Source, dir string, nam
 	}
 
 	urlname := getName(dir, link)
+	log.Printf("urlname %v \n", urlname)
 	defer response.Body.Close()
 	log.Printf("response (%v) \n", response.Header)
 	t := response.Header.Get("Content-Type")
@@ -135,7 +136,7 @@ func getName(subdir string, link string) string {
 	var bits = strings.Split(link, "/")
 	var name = bits[len(bits)-1]
 	name = strings.Split(name, "?")[0]
-	var dir = audioDir
+	var dir = audioDir + subdir + "/"
 	if strings.HasSuffix(name, "mp4") || strings.HasSuffix(name, "mv4") {
 		log.Println("Visual content\n")
 		dir = visualDir + subdir

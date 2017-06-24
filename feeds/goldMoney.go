@@ -9,19 +9,24 @@ import (
 )
 
 type GoldMoney struct {
-	SpotPrices []Spot
+  Rates Rate
+}
+
+type Rate struct {
+  Spots  []Spot
 }
 
 type Spot struct {
-	Metal     string
-	Timestamp uint64
-	SpotPrice float64
-	Trend     string
-	Units     string
+  quoteCurrency string
+  baseCurrency string
+  bid float64
+  avg float64
+  ask float64
 }
 
 //var feedURL = "http://ws.goldmoney.com/metal/prices/currentSpotPrices?currency=gbp&units="
-var feedURL = "https://wealth.goldmoney.com/api/prices/currentSpotPrices/?currency=gbp&price=ask&units="
+//var feedURL = "https://wealth.goldmoney.com/api/prices/currentSpotPrices/?currency=gbp&price=ask&units="
+var feedURL = "https://wealth-api.goldmoney.com/public/markets/summary"
 
 func getIt(url string) GoldMoney {
 	var price GoldMoney

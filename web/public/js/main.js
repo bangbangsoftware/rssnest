@@ -17,9 +17,9 @@ function p() {
     console.log("prices");
     console.log(prices);
     var ps = prices;
-    if (ps[0].SpotPrices != null) {
-        var ag = t(ps[0].SpotPrices[1].SpotPrice);
-        var gold = t(ps[1].SpotPrices[0].SpotPrice);
+    if (ps.rates != null) {
+        var gold = ps.rates.spot.filter(rate => (rate.baseCurrency === 'Gold' && rate.quoteCurrency === 'GBP'))[0].bid
+        var ag = ps.rates.spot.filter(rate => (rate.baseCurrency === 'Silver' && rate.quoteCurrency === 'GBP'))[0].bid
         if (ag && gold) {
             return `${gold}/gg, ${ag}/oz (28.0024/gg - 16.8322/oz)`;
         }

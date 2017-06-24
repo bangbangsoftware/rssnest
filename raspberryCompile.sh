@@ -11,12 +11,15 @@ cp *.go src/github.com/bangbangsoftware/.
 cp -r feeds src/github.com/bangbangsoftware/.
 cp -r config src/github.com/bangbangsoftware/.
 
-go build propergate.go 
-go build shortener.go
-go build ftpTarget.go 
-go build fileStore.go 
-go build httpSource.go 
-go build rssnest.go
+go get fmt
+go get net/http
+go build
+#go build propergate.go 
+#go build shortener.go
+#go build ftpTarget.go 
+#go build fileStore.go 
+#go build httpSource.go 
+#go build rssnest.go
 
 echo "Compiling for the raspberry pi"
 
@@ -37,5 +40,5 @@ go test  -cover
 
 echo "6. scp on to pi"
 scp rssnest osmc@osmc:./rssnest/.
-scp conf.json osmc@osmc:./rssnest/.
-scp ./data/casts.json osmc@osmc:./rssnest/data/.
+#scp conf.json osmc@osmc:./rssnest/.
+#scp ./data/casts.json osmc@osmc:./rssnest/data/.
