@@ -9,10 +9,10 @@ import (
 )
 
 type GoldMoney struct {
-	Rates Rate
+	Rate Rates
 }
 
-type Rate struct {
+type Rates struct {
 	Spots []Spot
 }
 
@@ -53,10 +53,10 @@ func getIt(url string) GoldMoney {
 	return price
 }
 
-func GetPrices() []GoldMoney {
-  var price = getIt(feedURL)
+func GetPrices() GoldMoney {
+	var price = getIt(feedURL)
   log.Printf("price %s\n", price)
-//	var price []GoldMoney
+  return price
 //	goldFeed := feedURL + "ounces"
 //	silverFeed := feedURL + "grams"
 //	price = append(price, getIt(goldFeed))
