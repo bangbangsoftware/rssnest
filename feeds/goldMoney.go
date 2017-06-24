@@ -9,19 +9,19 @@ import (
 )
 
 type GoldMoney struct {
-  Rates Rate
+	Rates Rate
 }
 
 type Rate struct {
-  Spots  []Spot
+	Spots []Spot
 }
 
 type Spot struct {
-  quoteCurrency string
-  baseCurrency string
-  bid float64
-  avg float64
-  ask float64
+	quoteCurrency string
+	baseCurrency  string
+	bid           float64
+	avg           float64
+	ask           float64
 }
 
 //var feedURL = "http://ws.goldmoney.com/metal/prices/currentSpotPrices?currency=gbp&units="
@@ -54,12 +54,14 @@ func getIt(url string) GoldMoney {
 }
 
 func GetPrices() []GoldMoney {
-	var price []GoldMoney
-	goldFeed := feedURL + "ounces"
-	silverFeed := feedURL + "grams"
-	price = append(price, getIt(goldFeed))
-	log.Printf("Gold : %s\n", price)
-	price = append(price, getIt(silverFeed))
-	log.Printf("Silver : %s\n", price)
-	return price
+  var price = getIt(feedURL)
+  log.Printf("price %s\n", price)
+//	var price []GoldMoney
+//	goldFeed := feedURL + "ounces"
+//	silverFeed := feedURL + "grams"
+//	price = append(price, getIt(goldFeed))
+//	log.Printf("Gold : %s\n", price)
+//	price = append(price, getIt(silverFeed))
+//	log.Printf("Silver : %s\n", price)
+//	return price
 }
