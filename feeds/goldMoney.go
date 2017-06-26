@@ -13,7 +13,19 @@ type GoldMoney struct {
 }
 
 type Rates struct {
-	Spots []Spot
+	day     []Quort
+	current []Quort
+	spot    []Spot
+}
+
+type Quort struct {
+	data []Avg
+}
+
+type Avg struct {
+	avg           float64
+	baseCurrency  string
+	quoteCurrency string
 }
 
 type Spot struct {
@@ -28,12 +40,12 @@ type Spot struct {
 //var feedURL = "https://wealth.goldmoney.com/api/prices/currentSpotPrices/?currency=gbp&price=ask&units="
 var feedURL = "https://wealth-api.goldmoney.com/public/markets/summary"
 
-func getIt(url string) GoldMoney {
+func getIt(url string) string {
 	var price GoldMoney
 	response, err := http.Get(url)
 	if err != nil {
 		log.Println(err)
-		return price
+		return "" 
 	}
 	defer response.Body.Close()
 	buffer := bytes.NewBuffer(make([]byte, 0, 65536))
@@ -48,20 +60,22 @@ func getIt(url string) GoldMoney {
 	} else {
 		data = temp
 	}
+	log.Printf("data %s\n", data)
 	json.Unmarshal(data, &price)
+	log.Printf("to... %s\n", price)
 
-	return price
+	return string(data) // price
 }
 
-func GetPrices() GoldMoney {
+func GetPrices() string {
 	var price = getIt(feedURL)
-  log.Printf("price %s\n", price)
-  return price
-//	goldFeed := feedURL + "ounces"
-//	silverFeed := feedURL + "grams"
-//	price = append(price, getIt(goldFeed))
-//	log.Printf("Gold : %s\n", price)
-//	price = append(price, getIt(silverFeed))
-//	log.Printf("Silver : %s\n", price)
-//	return price
+	log.Printf("price %s\n", price)
+	return price
+	//	goldFeed := feedURL + "ounces"
+	//	silverFeed := feedURL + "grams"
+	//	price = append(price, getIt(goldFeed))
+	//	log.Printf("Gold : %s\n", price)
+	//	price = append(price, getIt(silverFeed))
+	//	log.Printf("Silver : %s\n", price)
+	//	return price
 }

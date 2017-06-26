@@ -14,14 +14,14 @@ import (
 )
 
 type Target interface {
-	Send(newItems []feeds.RssResult, prices feeds.GoldMoney)
+	Send(newItems []feeds.RssResult, prices string)
 	Message(util Shortener, name string, url string)
 }
 
 type FtpTarget struct {
 }
 
-func (s FtpTarget) Send(newItems []feeds.RssResult, prices feeds.GoldMoney) {
+func (s FtpTarget) Send(newItems []feeds.RssResult, prices string) {
 	conf := config.GetConfig()
 	var perm os.FileMode = 0777
 	var err error
@@ -54,11 +54,11 @@ func (s FtpTarget) Send(newItems []feeds.RssResult, prices feeds.GoldMoney) {
 //	}
 
 	log.Printf("saving prices file to ftp to webserver\n\n\n")
-	var data3 = []byte("var prices = \n")
-	jsave2, _ := json.Marshal(prices)
-	for _, e := range jsave2 {
-		data3 = append(data3, e)
-	}
+	var data3 = []byte("var prices = "+ prices+"\n")
+//	jsave2, _ := json.Marshal(prices)
+//	for _, e := range jsave2 {
+//		data3 = append(data3, e)
+//	}
 	ioutil.WriteFile(conf.General.DataDir+"prices.json", data3, perm)
 	var pricesFile *os.File
 	if pricesFile, err = os.Open(conf.General.DataDir + "prices.json"); err != nil {

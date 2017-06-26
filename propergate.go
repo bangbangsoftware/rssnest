@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-func Propagate(store feeds.Store, target Target, prices feeds.GoldMoney, short Shortener, conf config.Settings) {
+func Propagate(store feeds.Store, target Target, prices string, short Shortener, conf config.Settings) {
 	log.Printf("\nPropagate the rss feeds results...")
 
 	qty := conf.Propagate.QtyPerPage
