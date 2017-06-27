@@ -16,10 +16,10 @@ function t(w) {
 function p() {
     console.log("prices");
     console.log(prices);
-    var ps = prices;
-    if (ps.rates != null) {
-        var gold = ps.rates.spot.filter(rate => (rate.baseCurrency === 'Gold' && rate.quoteCurrency === 'GBP'))[0].bid
-        var ag = ps.rates.spot.filter(rate => (rate.baseCurrency === 'Silver' && rate.quoteCurrency === 'GBP'))[0].bid
+    if (prices.rates != null && prices.rates.spot != null) {
+        var golds = prices.rates.spot.filter(rate => (rate.baseCurrency === 'Gold' && rate.quoteCurrency === 'GBP'))
+        var gold = golds[0].bid
+        var ag = prices.rates.spot.filter(rate => (rate.baseCurrency === 'Silver' && rate.quoteCurrency === 'GBP'))[0].bid
         if (ag && gold) {
             return `${gold}/gg, ${ag}/oz (28.0024/gg - 16.8322/oz)`;
         }
@@ -49,6 +49,7 @@ function replaceTag(filt, id, includeFail) {
         return 0;
     }).map(function(post) {
         var ad = new Date(post.Date);
+        console.log("posts...");
         console.log(post);
 
         var stDate = `${f(ad.getDate())}-${f(ad.getMonth()+1)}-${ad.getFullYear()} ${ad.getHours()}:${f(ad.getMinutes())}`;
@@ -102,5 +103,3 @@ replaceTag(failed, '#error', true);
 
 
 
-export
-default {}

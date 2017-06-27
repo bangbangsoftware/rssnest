@@ -30,12 +30,13 @@ I guess this is not so much a quick start as you'll need to set all the web stuf
 * jspm install
 * cd public
 
+UPDATE: you just need the material design stuff, jspm has been ditched as pure js works now.... 
+
 And ftp these files on to the webserver keeping the directory structure:
 
 * ./jspm_packages/github/google/material-design-lite@1.0.4/material.min.css
-* ./jspm_packages/system.js
-* ./config.js
 * ./js/main.js
+* go.html
 
 
 That should do it, add it to a cronjob and go and consume the content.
