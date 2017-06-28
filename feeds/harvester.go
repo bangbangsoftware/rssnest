@@ -134,7 +134,8 @@ func getName(subdir string, link string) string {
 	audioDir := conf.General.AudioDir
 	visualDir := conf.General.VisualDir
 	var bits = strings.Split(link, "/")
-	var name = bits[len(bits)-1]
+	t := "." + time.Now().Format("200615040501")
+	var name = bits[len(bits)-1] + t
 	name = strings.Split(name, "?")[0]
 	var dir = audioDir + subdir + "/"
 	if strings.HasSuffix(name, "mp4") || strings.HasSuffix(name, "mv4") {

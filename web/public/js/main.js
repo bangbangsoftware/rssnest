@@ -19,9 +19,10 @@ function p() {
     if (prices.rates != null && prices.rates.spot != null) {
         var golds = prices.rates.spot.filter(rate => (rate.baseCurrency === 'Gold' && rate.quoteCurrency === 'GBP'))
         var gold = golds[0].bid
+        console.log(typeof gold) 
         var ag = prices.rates.spot.filter(rate => (rate.baseCurrency === 'Silver' && rate.quoteCurrency === 'GBP'))[0].bid
         if (ag && gold) {
-            return `${gold}/gg, ${ag}/oz (28.0024/gg - 16.8322/oz)`;
+            return `${gold.toFixed(4)}/gg, ${ag.toFixed(4)}/oz (28.0024/gg - 16.8322/oz)`;
         }
     }
     return "?/gg, ?/oz (28,17)";

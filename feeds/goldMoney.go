@@ -69,7 +69,7 @@ func getIt(url string) string {
 
 func GetPrices() string {
 	var price = getIt(feedURL)
-	log.Printf("price %s\n", price)
+	//	log.Printf("price %s\n", price)
 	return price
 	//	goldFeed := feedURL + "ounces"
 	//	silverFeed := feedURL + "grams"
