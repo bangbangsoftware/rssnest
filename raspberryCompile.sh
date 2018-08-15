@@ -7,6 +7,7 @@ set | grep GO
 go get github.com/ChimeraCoder/anaconda
 go get github.com/dutchcoders/goftp
 
+mkdir src/github.com/bangbangsoftware
 cp *.go src/github.com/bangbangsoftware/.
 cp -r feeds src/github.com/bangbangsoftware/.
 cp -r config src/github.com/bangbangsoftware/.
@@ -14,12 +15,12 @@ cp -r config src/github.com/bangbangsoftware/.
 go get fmt
 go get net/http
 go build
-#go build propergate.go 
-#go build shortener.go
-#go build ftpTarget.go 
-#go build fileStore.go 
-#go build httpSource.go 
-#go build rssnest.go
+go build propergate.go 
+go build shortener.go
+go build ftpTarget.go 
+go build fileStore.go 
+go build httpSource.go 
+go build rssnest.go
 
 echo "Compiling for the raspberry pi"
 
